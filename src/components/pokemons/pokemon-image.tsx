@@ -1,4 +1,5 @@
-import { component$ } from "@builder.io/qwik";
+/* eslint-disable qwik/jsx-img */
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 interface Props {
   id: number;
   size?: number;
@@ -6,16 +7,36 @@ interface Props {
 }
 export const PokemonImage = component$(
   ({ id, size = 200, backImage = false }: Props) => {
+    const imageLoaded = useSignal(false);
+
+    useTask$(({ track }) => {
+      track(() => id);
+      imageLoaded.value = false;
+    });
+
     let imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${id}.png`;
     if (!backImage) {
       imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
     }
     return (
-      <img
-        src={imageUrl}
-        alt="Pokemon Sprites"
-        style={{ width: `${size}px` }}
-      />
+      <div
+        class="flex items-center justify-center"
+        style={{ width: `${size}px`, height: `${size}px` }}
+      >
+        {!imageLoaded.value && <span>Cargando...</span>}
+
+        <img
+          src={imageUrl}
+          alt="Pokemon Sprites"
+          style={{ width: `${size}px` }}
+          onLoad$={() => {
+            // setTimeout(() => {
+              imageLoaded.value = true;
+            // }, 500);
+          }}
+          class={{ hidden: !imageLoaded.value }}
+        />
+      </div>
     );
   }
 );
