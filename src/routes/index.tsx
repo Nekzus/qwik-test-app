@@ -6,20 +6,23 @@ import { PokemonImage } from "../components/pokemons/pokemon-image";
 export default component$(() => {
   const pokemonId = useSignal(1); //primitivos
   const showBackImage = useSignal(false);
+  const isPokemonVisible = useSignal(true);
 
   const changePokemonId = $((value: number) => {
     if (pokemonId.value + value <= 0) return;
     pokemonId.value += value;
   });
 
-  
-
   return (
     <>
       <span class="text-2xl">Buscador simple</span>
       <span class="text-9xl">{pokemonId}</span>
 
-      <PokemonImage id={pokemonId.value} backImage={showBackImage.value} />
+      <PokemonImage
+        id={pokemonId.value}
+        backImage={showBackImage.value}
+        isVisible={isPokemonVisible.value}
+      />
       <div class="mt-2">
         <button
           onClick$={() => changePokemonId(-1)}
@@ -33,8 +36,17 @@ export default component$(() => {
         >
           Siguiente
         </button>
-        <button onClick$={() => showBackImage.value = !showBackImage.value} class="btn btn-primary">
+        <button
+          onClick$={() => (showBackImage.value = !showBackImage.value)}
+          class="btn btn-primary mr-2"
+        >
           Voltear
+        </button>
+        <button
+          onClick$={() => (isPokemonVisible.value = !isPokemonVisible.value)}
+          class="btn btn-primary"
+        >
+          Revelar
         </button>
       </div>
     </>
