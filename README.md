@@ -56,7 +56,7 @@ The preview command will create a production build of the client modules, a prod
 yarn preview # or `yarn preview`
 ```
 
-## Production !!!
+## Production
 
 The production build will generate client and server modules by running both client and server build commands. Additionally, the build command will use Typescript to run a type check on the source code.
 
